@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-gestures = ["Rock", "Palm", "No"]   # All possible gestures, constant variables.
+gestures = ["Arrow left", "Arrow right", "Arrow up", "Fist", "Open palm"]   # All possible gestures, constant variables.
 availableGestures = gestures    # All gestures that shall be possible to chose from in the interface. List may change during run.
 
 # All custom pick able keys in the interface.
