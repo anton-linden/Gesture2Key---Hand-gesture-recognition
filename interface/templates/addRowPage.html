@@ -27,8 +27,8 @@
                </div>
 
                    <div class="form-group" style="margin-top: 20px;">
-                    <label for="exampleFormControlSelect1">Select Gesture</label>
-                    <select class="form-control" id="exampleFormControlSelect1" name="gesture" required>
+                    <label for="gestureSelect">Select Gesture</label>
+                    <select class="form-control" id="gestureSelect" name="gesture" required>
                         {% for gesture in availableGestures %}
                             <option>{{ gesture }}</option>
                         {% endfor %}
@@ -36,8 +36,8 @@
                   </div>
 
                   <div class="form-group" style="margin-top: 20px;">
-                   <label for="exampleFormControlSelect1">Select key to bind the gesture to</label>
-                   <select class="form-control" id="exampleFormControlSelect1" name="key" required>
+                   <label for="keySelect">Select key to bind the gesture to</label>
+                   <select class="form-control" id="keySelect" name="key" required>
                        {% for keyObject in customKeys %}
                            <option>{{ keyObject['keyName'] }}</option>
                        {% endfor %}

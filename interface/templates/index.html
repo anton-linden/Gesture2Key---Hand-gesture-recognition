@@ -39,7 +39,7 @@
                   <form action="/removeElement/" method="post">
                     <tr>
                           <td>{{ row['name'] }}</td>
-                          <td><img src="/static/images/{{ row['gesture'] }}.png" alt=""></td>
+                          <td><img src="/static/images/{{ row['gesture'] }}.png" title="{{row['gesture']}}" style="width: 51px; height: auto" alt=""></td>
                           <td>{{ row['key'] }}</td>
 
                           <div class="hidden">
