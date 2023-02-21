@@ -1,0 +1,54 @@
+body {
+ margin: 0;
+ padding: 0;
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+ background-color:  #EFE9F4
+}
+
+h1, h2, h3, p, a, label, input {
+  font-family: 'Sofia Sans', sans-serif;
+}
+
+header {
+ background-color: #484D6D;
+ color: #fff;
+ padding: 1em;
+}
+
+#content {
+ flex: 1;
+ padding: 1em;
+}
+
+footer {
+ background-color: #484D6D;
+ color: #fff;
+ padding: 1em;
+ margin-top: auto;
+}
+
+.title {
+ margin-top: 100px;
+ margin-bottom: 30px;
+}
+
+.addAGestureButton {
+ margin-top: 50px;
+}
+
+.hidden {
+ display: none;
+}
+
+.center-form {
+  width: 30%;
+  text-align: center;
+  margin-left: 35%;
+}
+
+.add-button-div {
+  text-align: right;
+  margin-bottom: 20px;
+}
