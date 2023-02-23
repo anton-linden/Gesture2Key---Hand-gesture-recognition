@@ -21,7 +21,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-gestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "PointUp", "PointDown"]   # All possible gestures, constant variables.
+gestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight"]   # All possible gestures, constant variables.
 availableGestures = gestures    # All gestures that shall be possible to chose from in the interface. List may change during run.
 
 
@@ -583,7 +583,8 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
         cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
                    cv.LINE_AA)
-        simulate_keypress(hand_sign_text)
+        simulate_keypress(hand_sign_text, "hand")
+        simulate_keypress(finger_gesture_text, "finger")
 
     return image
 
@@ -617,17 +618,26 @@ def draw_info(image, fps, mode, number):
 
 gesture_to_keybindings_dict = {}
 
-def simulate_keypress(key_name):
-    global time_at_last_gesture
-    time_diff = time.perf_counter() - time_at_last_gesture
-    if time_diff > 1.5:
-        if (key_name in gesture_to_keybindings_dict):
+def simulate_keypress(key_name, gesture_type): 
+    global time_at_last_hand_gesture, time_at_last_finger_gesture
+    if gesture_type == "hand":
+        time_delay = 1.5
+        time_diff = time.perf_counter() - time_at_last_hand_gesture
+    else:
+        time_delay = 0.1
+        time_diff = time.perf_counter() - time_at_last_finger_gesture
+    if time_diff > time_delay:
+        if(key_name in gesture_to_keybindings_dict):      
             keys_to_press = gesture_to_keybindings_dict[key_name]
             for key in keys_to_press:
                 keyboard.press(key)
             for key in keys_to_press[::-1]:
                 keyboard.release(key)
-        time_at_last_gesture = time.perf_counter()
+        if gesture_type == "hand":
+            time_at_last_hand_gesture = time.perf_counter()
+        else:
+            time_at_last_finger_gesture = time.perf_counter()
+
 
 
 def updateKeyPressed():
@@ -645,7 +655,8 @@ def updateKeyPressed():
 
 if __name__ == '__main__':
     keyboard = Controller()
-    time_at_last_gesture = time.perf_counter()
+    time_at_last_hand_gesture = time.perf_counter()
+    time_at_last_finger_gesture = time.perf_counter()
 
     updateKeyPressed()
 
