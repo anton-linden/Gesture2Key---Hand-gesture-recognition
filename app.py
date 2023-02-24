@@ -21,7 +21,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-gestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight"]   # All possible gestures, constant variables.
+gestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight", "PointUp", "PointDown"]   # All possible gestures, constant variables.
 availableGestures = gestures    # All gestures that shall be possible to chose from in the interface. List may change during run.
 
 
