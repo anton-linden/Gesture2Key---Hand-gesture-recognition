@@ -49,6 +49,11 @@ footer {
 }
 
 .add-button-div {
-  text-align: right;
-  margin-bottom: 20px;
+    text-align: right;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.add-button-div button {
+    margin-right: 10px;
 }

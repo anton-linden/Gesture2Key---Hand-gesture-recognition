@@ -38,6 +38,7 @@ customKeys = [
 
 data = []  # Array to manage the dataset.
 
+
 # Navigates to the main HTML page in templates.
 @app.route('/')
 def index():
@@ -49,6 +50,18 @@ def index():
 @app.route('/addRowPage/')
 def addRowPage():
     return render_template('addRowPage.html', availableGestures=availableGestures, customKeys=customKeys)
+
+
+# Removes all added gestures for faster removal
+@app.route('/removeAllElements/')
+def removeAllElements():
+    global availableGestures
+    global data
+
+    data = []
+    availableGestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight", "PointUp", "PointDown"]
+
+    return index()
 
 
 # Adds a new entry into the data set.
