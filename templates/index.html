@@ -19,8 +19,6 @@
       fetch('/status')
          .then(response => response.json())
          .then(data => {
-            console.log("data_changed", data_changed);
-            console.log("data", data.done);
             if (data.done != data_changed) {
                fetch('/')
                   .then(response => response.text())
