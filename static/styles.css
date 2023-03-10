@@ -49,11 +49,29 @@ footer {
 }
 
 .add-button-div {
-    text-align: right;
     margin-bottom: 20px;
     display: flex;
+    justify-content: flex-end;
 }
 
 .add-button-div button {
     margin-right: 10px;
+}
+
+.bottom-help-text {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.important-text {
+  margin-top: 10px;
+  font-size: 125%;
+  color: red;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  50% {
+    color: black;
+  }
 }

@@ -6,6 +6,7 @@ import argparse
 import itertools
 from collections import Counter
 from collections import deque
+import threading
 
 import cv2 as cv
 import numpy as np
@@ -37,13 +38,13 @@ customKeys = [
 ] # Keys found at: https://learn.microsoft.com/sv-se/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
 
 data = []  # Array to manage the dataset.
-
+data_changed = False
 
 # Navigates to the main HTML page in templates.
 @app.route('/')
 def index():
     # Render the template with the data
-    return render_template('index.html', data=data, availableGestures=availableGestures, customKeys=customKeys)
+    return render_template('index.html', data=data, data_changed=data_changed, availableGestures=availableGestures, customKeys=customKeys)
 
 
 # Navigates to the HTML page in templates for adding a new entry.
@@ -57,16 +58,17 @@ def addRowPage():
 def removeAllElements():
     global availableGestures
     global data
-
+    global data_changed
     data = []
     availableGestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight", "PointUp", "PointDown"]
-
+    data_changed = True
     return index()
 
 
 # Adds a new entry into the data set.
 @app.route("/addRow/", methods=['POST'])
 def addRow():
+    global data_changed
 
     if len(availableGestures) <= 0:
         return index()
@@ -80,19 +82,27 @@ def addRow():
 
     data.append({'name': _name, 'gesture': _gesture, 'key': _key})
     availableGestures.remove(_gesture)
+    data_changed = True
 
     return index()
 
+def runModelThread():
+    global data_changed
+    data_changed = False
+    updateKeyPressed()
+    main()
 
 @app.route("/runModel/", methods=['POST'])
 def runModel():
-    updateKeyPressed()
-    main()
+    threading.Thread(target=runModelThread).start()
+    
+    return index()
 
 
 # Removes an entry in the dataset.
 @app.route("/removeElement/", methods=['POST'])
 def removeElement():
+    global data_changed
 
     _gesture = request.form['gesture']
 
@@ -100,6 +110,7 @@ def removeElement():
         if _gesture == d.get('gesture'):
             availableGestures.append(_gesture)
             data.remove(d)
+    data_changed = True
 
     return index()
 
@@ -633,26 +644,24 @@ gesture_to_keybindings_dict = {}
 
 def simulate_keypress(key_name, gesture_type): 
     global time_at_last_hand_gesture, time_at_last_finger_gesture
-    if gesture_type == "hand":
-        time_delay = 1.5
-        time_diff = time.perf_counter() - time_at_last_hand_gesture
-    else:
-        time_delay = 0.1
-        time_diff = time.perf_counter() - time_at_last_finger_gesture
-    if time_diff > time_delay:
-        if(key_name in gesture_to_keybindings_dict):      
-            keys_to_press = gesture_to_keybindings_dict[key_name]
-            for key in keys_to_press:
-                keyboard.press(key)
-            for key in keys_to_press[::-1]:
-                keyboard.release(key)
-        if gesture_type == "hand":
-            time_at_last_hand_gesture = time.perf_counter()
+    if key_name in gesture_to_keybindings_dict:
+        key_to_press = gesture_to_keybindings_dict[key_name]
+        if key_to_press == 175 or key_to_press == 174:
+            time_delay = 0.1
         else:
-            time_at_last_finger_gesture = time.perf_counter()
-
-
-
+            time_delay = 1.5
+        if gesture_type == "hand":
+            time_diff = time.perf_counter() - time_at_last_hand_gesture
+        else:
+            time_diff = time.perf_counter() - time_at_last_finger_gesture
+        if time_diff > time_delay:
+            keyboard.press(KeyCode.from_vk(key_to_press))
+            keyboard.release(KeyCode.from_vk(key_to_press))
+            if gesture_type == "hand":
+                time_at_last_hand_gesture = time.perf_counter()
+            else:
+                time_at_last_finger_gesture = time.perf_counter()
+        
 def updateKeyPressed():
     global gesture_to_keybindings_dict
     global data
@@ -663,7 +672,7 @@ def updateKeyPressed():
         for item in customKeys:
             if item["keyName"] == entry["key"]:
                 print("gesture: " + entry["gesture"] + " added key: " + item["keyCode"])
-                gesture_to_keybindings_dict[entry["gesture"]] = [KeyCode.from_vk(int(item["keyCode"], 16))]
+                gesture_to_keybindings_dict[entry["gesture"]] = int(item["keyCode"], 16)
 
 
 if __name__ == '__main__':

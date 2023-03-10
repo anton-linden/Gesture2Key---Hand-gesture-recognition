@@ -1,73 +1,78 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>My Website</title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@300&display=swap" rel="stylesheet">
+<head>
+   <title>My Website</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-   </head>
-   <body>
-     <header>
-        <h1><a href="/" style="color: #fff; text-decoration: none;">Gesture2Key</a></h1>
-     </header>
-      <div id="content">
-         <div class="container" style=" text-align: center">
-            <h1 class="title">Add a Gesture</h1>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@300&display=swap" rel="stylesheet">
 
-             <form class="center-form needs-validation" action="/addRow/" method="post">
+</head>
 
-               <div class="" style="margin-top: 20px;">
-                 <label for="name">Name for the gesture binding</label>
-                  <input class="form-control" type="text" name="name" id="name" placeholder="name" required>
-               </div>
+<body>
+   <header>
+      <h1><a href="/" style="color: #fff; text-decoration: none;">Gesture2Key</a></h1>
+   </header>
+   <div id="content">
+      <div class="container" style=" text-align: center">
+         <h1 class="title">Add a Gesture</h1>
 
-                   <div class="form-group" style="margin-top: 20px;">
-                    <label for="gestureSelect">Select Gesture</label>
-                    <select class="form-control" id="gestureSelect" name="gesture" required>
-                        {% for gesture in availableGestures %}
-                            <option>{{ gesture }}</option>
-                        {% endfor %}
-                    </select>
-                  </div>
+         <form class="center-form needs-validation" action="/addRow/" method="post">
 
-                  <div class="form-group" style="margin-top: 20px;">
-                   <label for="keySelect">Select key to bind the gesture to</label>
-                   <select class="form-control" id="keySelect" name="key" required>
-                       {% for keyObject in customKeys %}
-                           <option>{{ keyObject['keyName'] }}</option>
-                       {% endfor %}
-                   </select>
-                 </div>
+            <div class="" style="margin-top: 20px;">
+               <label for="name">Name for the gesture binding</label>
+               <input class="form-control" type="text" name="name" id="name" placeholder="name" required>
+            </div>
 
-                  <!-- <div class="" style="margin-top: 20px;">
+            <div class="form-group" style="margin-top: 20px;">
+               <label for="gestureSelect">Select Gesture</label>
+               <select class="form-control" id="gestureSelect" name="gesture" required>
+                  {% for gesture in availableGestures %}
+                  <option>{{ gesture }}</option>
+                  {% endfor %}
+               </select>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+               <label for="keySelect">Select key to bind the gesture to</label>
+               <select class="form-control" id="keySelect" name="key" required>
+                  {% for keyObject in customKeys %}
+                  <option>{{ keyObject['keyName'] }}</option>
+                  {% endfor %}
+               </select>
+            </div>
+
+            <!-- <div class="" style="margin-top: 20px;">
                     <label for="key">Keyboard key to bind the gesture to</label>
                     <input class="form-control" name="key" type="text" placeholder="key" id="key" maxlength="1" required>
                   </div> -->
 
-                  <div class="" style="margin-top: 40px;">
-                    <button style="width: 180px" type="submit" class="btn btn-success" name="SaveRowBtn" type="submit">Save</button>
-                  </div>
-             </form>
+            <div class="" style="margin-top: 40px;">
+               <button style="width: 180px" type="submit" class="btn btn-success" name="SaveRowBtn"
+                  type="submit">Save</button>
+            </div>
+         </form>
 
-             <form action="/" style="margin-top: 7px;">
-               <button style="width: 180px" type="submit" class="btn btn-danger" name="CancelBtn" href="submit">Cancel</button>
-             </form>
+         <form action="/" style="margin-top: 7px;">
+            <button style="width: 180px" type="submit" class="btn btn-danger" name="CancelBtn"
+               href="submit">Cancel</button>
+         </form>
 
 
-         </div>
       </div>
-      </div>
-      </div>
-      <footer>
-         <p>&copy; 2023 <a href="https://github.com/anton-linden/D7048E---Project">GitHub Link</a></p>
-      </footer>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-   </body>
+   </div>
+   </div>
+   </div>
+   <footer>
+      <p>&copy; 2023 <a href="https://github.com/anton-linden/D7048E---Project">GitHub Link</a></p>
+   </footer>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
 </html>
