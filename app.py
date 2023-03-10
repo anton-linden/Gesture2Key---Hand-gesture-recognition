@@ -18,7 +18,7 @@ from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
@@ -38,7 +38,8 @@ customKeys = [
 ] # Keys found at: https://learn.microsoft.com/sv-se/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
 
 data = []  # Array to manage the dataset.
-data_changed = False
+data_changed = 0
+has_started = False
 
 # Navigates to the main HTML page in templates.
 @app.route('/')
@@ -61,7 +62,7 @@ def removeAllElements():
     global data_changed
     data = []
     availableGestures = ["Open", "Close", "OK", "PointRight", "PointLeft", "MoveLeft", "MoveRight", "PointUp", "PointDown"]
-    data_changed = True
+    data_changed = 1
     return index()
 
 
@@ -82,13 +83,13 @@ def addRow():
 
     data.append({'name': _name, 'gesture': _gesture, 'key': _key})
     availableGestures.remove(_gesture)
-    data_changed = True
+    data_changed = 1
 
     return index()
 
 def runModelThread():
     global data_changed
-    data_changed = False
+    data_changed = 2
     updateKeyPressed()
     main()
 
@@ -110,9 +111,13 @@ def removeElement():
         if _gesture == d.get('gesture'):
             availableGestures.append(_gesture)
             data.remove(d)
-    data_changed = True
+    data_changed = 1
 
     return index()
+
+@app.route('/status')
+def status():
+    return jsonify({'done': data_changed})
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -137,6 +142,7 @@ def get_args():
 
 
 def main():
+    global data_changed
     # Argument parsing #################################################################
     args = get_args()
 
@@ -275,6 +281,8 @@ def main():
 
         # Screen reflection #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
+        if data_changed == 2:
+            data_changed = 0
 
     cap.release()
     cv.destroyAllWindows()

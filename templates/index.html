@@ -12,6 +12,27 @@
    <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans:wght@300&display=swap" rel="stylesheet">
 
 </head>
+<div id="my_variable" style="display: none;">{{ data_changed }}</div>
+<script>
+   function checkStatus() {
+      const data_changed = document.getElementById("my_variable").textContent;
+      fetch('/status')
+         .then(response => response.json())
+         .then(data => {
+            console.log("data_changed", data_changed);
+            console.log("data", data.done);
+            if (data.done != data_changed) {
+               fetch('/')
+                  .then(response => response.text())
+                  .then(html => {
+                     document.documentElement.innerHTML = html;
+                  });
+            } else {
+               setTimeout(checkStatus, 1000); // Check again in 1 second
+            }
+         });
+   }
+</script>
 
 <body>
    <header>
@@ -21,10 +42,16 @@
 
       <div>
          <form action="/runModel/" method="post">
-            <button type="submit" class="btn btn-info" name="runModelBtn" type="submit" onclick="location.reload()">Reload Camera</button>
+            <button type="submit" class="btn btn-info" name="runModelBtn" type="submit"
+               onclick="document.querySelector('.loading-animation').classList.add('show')">Reload Camera</button>
          </form>
-         {% if data_changed %}
-            <p class="important-text">Changes noticed, press reload camera button to implement changes</p>
+         {% if data_changed == 1 %}
+         <p class="important-text">Changes noticed, press reload camera button to implement changes</p>
+         {% elif data_changed == 2 %}
+         <script>
+            checkStatus();
+         </script>
+         <div class="loading-animation"></div>
          {% endif%}
       </div>
 
@@ -83,7 +110,6 @@
    </div>
    </div>
    </div>
-
    <footer>
       <p>&copy; MIT License 2023 <a href="https://github.com/anton-linden/D7048E---Project">GitHub Link</a></p>
    </footer>
