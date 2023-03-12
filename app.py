@@ -18,7 +18,7 @@ from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 
 app = Flask(__name__)
 
@@ -118,6 +118,10 @@ def removeElement():
 @app.route('/status')
 def status():
     return jsonify({'done': data_changed})
+
+@app.route('/reload', methods={'POST'})
+def reload_page():
+    return redirect('/')
 
 def get_args():
     parser = argparse.ArgumentParser()

@@ -20,11 +20,7 @@
          .then(response => response.json())
          .then(data => {
             if (data.done != data_changed) {
-               fetch('/')
-                  .then(response => response.text())
-                  .then(html => {
-                     document.documentElement.innerHTML = html;
-                  });
+               document.querySelector('#reload_button').click();
             } else {
                setTimeout(checkStatus, 1000); // Check again in 1 second
             }
@@ -104,7 +100,9 @@
          <p>Unsure what to do? Start binding some gestures to keys by pressing add gesture button</p>
          {% endif %}
       </div>
-
+      <form method="post" action="/reload" style="display: none">
+         <button type="submit" id="reload_button"></button>
+      </form>
    </div>
    </div>
    </div>
